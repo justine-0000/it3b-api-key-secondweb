@@ -14,9 +14,6 @@ export function TopNav() {
           <Link href="/" className="hover:text-blue-600 transition-colors">
             Dashboard
           </Link>
-          <Link href="/published" className="hover:text-blue-600 transition-colors">
-            Published
-          </Link>
           <Link href="/about" className="hover:text-blue-600 transition-colors">
             About
           </Link>
