@@ -22,6 +22,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.31.10",
     "@emailjs/browser": "^4.4.1",
+    "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
@@ -31,6 +32,7 @@
     "drizzle-orm": "^0.41.0",
     "lucide-react": "^0.543.0",
     "next": "^15.2.3",
+    "pg": "^8.16.3",
     "postgres": "^3.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
