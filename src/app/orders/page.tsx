@@ -71,7 +71,7 @@ export default function OrdersPage() {
 
   if (orders.length === 0 && !cancelReceipt) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden pt-24">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: '1s'}}></div>
@@ -85,7 +85,11 @@ export default function OrdersPage() {
                 <Package className="text-purple-400/50 relative z-10 group-hover:scale-110 transition-transform" size={80} />
               </div>
               <h2 className="text-4xl font-bold text-white mb-4">No Orders Yet</h2>
-              <p className="text-purple-300/70 text-lg">You haven't placed any orders yet. Start shopping to see your orders here!</p>
+              <p className="text-purple-300/70 text-lg mb-8">You haven't placed any orders yet. Start shopping to see your orders here!</p>
+              <a href="/" className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105 shadow-lg">
+                <Package size={20} />
+                <span>Start Shopping</span>
+              </a>
             </div>
           </div>
         </div>
@@ -94,7 +98,7 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden pt-24">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: '1s'}}></div>

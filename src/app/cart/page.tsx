@@ -103,7 +103,7 @@ export default function CartPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 pt-24">
         <div className="relative">
           <div className="absolute inset-0 bg-purple-500 blur-3xl opacity-30 animate-pulse"></div>
           <Loader2 className="animate-spin text-purple-400 relative z-10" size={64} />
@@ -113,7 +113,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden pt-24">
       {/* Animated background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
@@ -155,10 +155,10 @@ export default function CartPage() {
                   </div>
                   <h3 className="text-3xl font-bold text-white mb-4">Your cart is empty</h3>
                   <p className="text-purple-300/70 text-lg mb-8">Start adding amazing artifacts to your collection</p>
-                  <div className="inline-flex items-center gap-2 text-purple-400">
+                  <a href="/" className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105 shadow-lg">
                     <Sparkles size={20} />
-                    <span>Browse our collection</span>
-                  </div>
+                    <span>Browse Collection</span>
+                  </a>
                 </div>
               </div>
             ) : (
@@ -208,21 +208,7 @@ export default function CartPage() {
                             </p>
                           </div>
 
-                          <div className="flex items-center gap-2 bg-white/5 rounded-2xl p-1 border border-white/10">
-                            <button
-                              onClick={() => updateQuantity(item.cartId, item.quantity - 1)}
-                              className="w-10 h-10 flex items-center justify-center text-white rounded-xl hover:bg-purple-500/30 transition-all"
-                            >
-                              <Minus size={18} />
-                            </button>
-                            <span className="text-white font-bold w-12 text-center text-lg">{item.quantity}</span>
-                            <button
-                              onClick={() => updateQuantity(item.cartId, item.quantity + 1)}
-                              className="w-10 h-10 flex items-center justify-center text-white rounded-xl hover:bg-purple-500/30 transition-all"
-                            >
-                              <Plus size={18} />
-                            </button>
-                          </div>
+                        
 
                           <button
                             onClick={() => removeFromCart(item.cartId)}
@@ -238,7 +224,7 @@ export default function CartPage() {
                 </div>
 
                 <div>
-                  <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 sticky top-8">
+                  <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 sticky top-28">
                     <div className="flex items-center gap-3 mb-8">
                       <div className="p-3 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-purple-500/30">
                         <CreditCard className="text-purple-300" size={24} />
@@ -411,7 +397,7 @@ export default function CartPage() {
             </div>
 
             <div>
-              <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 sticky top-8">
+              <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 sticky top-28">
                 <h2 className="text-2xl font-bold text-white mb-6">Order Summary</h2>
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between items-center py-3 border-b border-white/10">
