@@ -31,6 +31,7 @@ export default function PublishedPage() {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [selectedImage, setSelectedImage] = useState<{ url: string; name: string } | null>(null);
   const [scrollY, setScrollY] = useState(0);
+  const [purchasedArtifacts, setPurchasedArtifacts] = useState<Set<string>>(new Set());
   const router = useRouter();
 
   const fetchArtifacts = async () => {
@@ -55,6 +56,14 @@ export default function PublishedPage() {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Load purchased artifacts from localStorage
+  useEffect(() => {
+    const purchasedIds = localStorage.getItem("purchasedArtifacts");
+    if (purchasedIds) {
+      setPurchasedArtifacts(new Set(JSON.parse(purchasedIds)));
+    }
   }, []);
 
   const addToCart = (artifact: Artifact) => {
@@ -95,11 +104,20 @@ export default function PublishedPage() {
     setSelectedImage(null);
   };
 
-  const filteredArtifacts = artifacts.filter(artifact =>
-    artifact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    artifact.origin.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    artifact.period.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter out purchased artifacts and apply search
+  const filteredArtifacts = artifacts.filter(artifact => {
+    // Filter out purchased artifacts
+    if (purchasedArtifacts.has(artifact.id)) {
+      return false;
+    }
+    
+    // Apply search filter
+    return (
+      artifact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      artifact.origin.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      artifact.period.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 
   const SignedOutView = () => (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden relative">
@@ -369,8 +387,8 @@ export default function PublishedPage() {
               
               <div className="flex items-center gap-4">
                 <div className="text-center px-6 py-3 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10">
-                  <div className="text-2xl font-bold text-white">{artifacts.length}</div>
-                  <div className="text-xs text-white/60">Total Items</div>
+                  <div className="text-2xl font-bold text-white">{filteredArtifacts.length}</div>
+                  <div className="text-xs text-white/60">Available Items</div>
                 </div>
                 <button
                   onClick={viewCart}
@@ -605,7 +623,7 @@ export default function PublishedPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
                 <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 text-center">
                   <TrendingUp className="text-green-400 mx-auto mb-3" size={32} />
-                  <div className="text-3xl font-bold text-white mb-1">{artifacts.filter(a => !a.revoked).length}</div>
+                  <div className="text-3xl font-bold text-white mb-1">{artifacts.filter(a => !a.revoked && !purchasedArtifacts.has(a.id)).length}</div>
                   <div className="text-white/60">Active Listings</div>
                 </div>
                 <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 text-center">

@@ -76,14 +76,22 @@ export default function PaymentPage() {
         estimatedDelivery: estimatedDelivery.toLocaleDateString("en-PH",{dateStyle:"long"})
       };
 
+      // Save order
       const savedOrders = localStorage.getItem("orders");
       const orders = savedOrders ? JSON.parse(savedOrders) : [];
       orders.push(order);
       localStorage.setItem("orders", JSON.stringify(orders));
 
-      const remainingCart = sessionStorage.getItem("remainingCart");
-      if(remainingCart) sessionStorage.setItem("cart", remainingCart);
+      // Track purchased artifact IDs
+      const purchasedIds = localStorage.getItem("purchasedArtifacts");
+      const purchased = purchasedIds ? JSON.parse(purchasedIds) : [];
+      
+      // Add all artifact IDs from current order
+      const newPurchasedIds = cartItems.map(item => item.id);
+      const updatedPurchased = [...new Set([...purchased, ...newPurchasedIds])];
+      localStorage.setItem("purchasedArtifacts", JSON.stringify(updatedPurchased));
 
+      // Clear session storage
       sessionStorage.removeItem("cart");
       sessionStorage.removeItem("shippingData");
       sessionStorage.removeItem("remainingCart");
@@ -100,7 +108,7 @@ export default function PaymentPage() {
 
   if(loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 pt-24">
         <div className="relative">
           <div className="absolute inset-0 bg-purple-500 blur-3xl opacity-30 animate-pulse"></div>
           <Loader2 className="animate-spin text-purple-400 relative z-10" size={64}/>
@@ -111,7 +119,7 @@ export default function PaymentPage() {
 
   if(orderConfirmed) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden pt-24">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-green-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{animationDelay: '1s'}}></div>
@@ -159,7 +167,7 @@ export default function PaymentPage() {
 
   if(!shippingData || cartItems.length===0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden pt-24">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: '1s'}}></div>
@@ -207,7 +215,7 @@ export default function PaymentPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden pt-24">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: '1s'}}></div>

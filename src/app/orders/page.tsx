@@ -61,9 +61,24 @@ export default function OrdersPage() {
   const confirmCancelOrder = () => {
     if (!confirmCancel) return;
 
+    // Remove order from orders list
     const updatedOrders = orders.filter((order) => order.orderId !== confirmCancel.orderId);
     setOrders(updatedOrders);
     localStorage.setItem("orders", JSON.stringify(updatedOrders));
+
+    // RESTORE ARTIFACTS: Remove artifact IDs from purchasedArtifacts
+    const purchasedIds = localStorage.getItem("purchasedArtifacts");
+    if (purchasedIds) {
+      const purchased: string[] = JSON.parse(purchasedIds);
+      
+      // Get all artifact IDs from the canceled order
+      const canceledArtifactIds = confirmCancel.items.map(item => item.id);
+      
+      // Filter out the canceled artifact IDs
+      const updatedPurchased = purchased.filter(id => !canceledArtifactIds.includes(id));
+      
+      localStorage.setItem("purchasedArtifacts", JSON.stringify(updatedPurchased));
+    }
 
     setCancelReceipt(confirmCancel);
     setConfirmCancel(null);
@@ -142,6 +157,13 @@ export default function OrdersPage() {
                 </div>
                 
                 <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
+                  <p className="text-red-200/70 text-sm mb-1">Items Restored</p>
+                  <p className="text-white font-semibold">
+                    {cancelReceipt.items.length} artifact{cancelReceipt.items.length !== 1 ? 's' : ''} returned to marketplace
+                  </p>
+                </div>
+
+                <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
                   <p className="text-red-200/70 text-sm mb-1">Canceled On</p>
                   <p className="text-white font-semibold">
                     {new Date().toLocaleString("en-PH", { dateStyle: "long", timeStyle: "short" })}
@@ -150,10 +172,14 @@ export default function OrdersPage() {
               </div>
 
               <button
-                onClick={() => setCancelReceipt(null)}
+                onClick={() => {
+                  setCancelReceipt(null);
+                  // Redirect to homepage to see restored artifacts
+                  window.location.href = "/";
+                }}
                 className="w-full py-3 px-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold rounded-2xl hover:from-red-500 hover:to-red-600 transition-all duration-300 shadow-lg"
               >
-                Close
+                View Restored Artifacts
               </button>
             </div>
           </div>
@@ -195,9 +221,9 @@ export default function OrdersPage() {
                 </div>
               </div>
 
-              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 mb-6">
-                <p className="text-yellow-200/90 text-sm text-center">
-                  ⚠️ This action cannot be undone. Your refund will be processed accordingly.
+              <div className="bg-green-500/10 border border-green-500/30 rounded-2xl p-4 mb-6">
+                <p className="text-green-200/90 text-sm text-center">
+                  ✅ Artifacts will be restored to the marketplace and available for purchase again
                 </p>
               </div>
 
