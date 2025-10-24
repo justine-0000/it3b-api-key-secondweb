@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nextjs";
-import { Camera, MapPin, Calendar, DollarSign, Shield, ShieldCheck, Loader2, Lock, Users, ShoppingCart, Search, Star, Sparkles, Heart, TrendingUp } from "lucide-react";
+import { Camera, MapPin, Calendar, DollarSign, Shield, ShieldCheck, Loader2, Lock, Users, ShoppingCart, Search, Star, Sparkles, Heart, TrendingUp, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface Artifact {
@@ -29,6 +29,7 @@ export default function PublishedPage() {
   const [addedItems, setAddedItems] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [selectedImage, setSelectedImage] = useState<{ url: string; name: string } | null>(null);
   const router = useRouter();
 
   const fetchArtifacts = async () => {
@@ -79,6 +80,14 @@ export default function PublishedPage() {
 
   const viewCart = () => {
     router.push("/cart");
+  };
+
+  const openImageModal = (imageUrl: string, name: string) => {
+    setSelectedImage({ url: imageUrl, name });
+  };
+
+  const closeImageModal = () => {
+    setSelectedImage(null);
   };
 
   const filteredArtifacts = artifacts.filter(artifact =>
@@ -230,7 +239,10 @@ export default function PublishedPage() {
                   }}
                 >
                   {/* Image Section */}
-                  <div className="relative h-64 overflow-hidden bg-gradient-to-br from-purple-900/20 to-pink-900/20">
+                  <div 
+                    className="relative h-64 overflow-hidden bg-gradient-to-br from-purple-900/20 to-pink-900/20 cursor-pointer"
+                    onClick={() => artifact.imageUrl && openImageModal(artifact.imageUrl, artifact.name)}
+                  >
                     {artifact.imageUrl ? (
                       <img
                         src={artifact.imageUrl}
@@ -259,7 +271,10 @@ export default function PublishedPage() {
 
                     {/* Favorite Button */}
                     <button
-                      onClick={() => toggleFavorite(artifact.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(artifact.id);
+                      }}
                       className="absolute top-4 left-4 p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-110"
                     >
                       <Heart 
@@ -383,6 +398,39 @@ export default function PublishedPage() {
             )}
           </div>
         </div>
+
+        {/* Image Modal */}
+        {selectedImage && (
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fadeIn"
+            onClick={closeImageModal}
+          >
+            <button
+              onClick={closeImageModal}
+              className="absolute top-8 right-8 p-4 bg-white/10 backdrop-blur-md rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-110 hover:rotate-90 z-50"
+            >
+              <X className="text-white" size={32} />
+            </button>
+            
+            <div 
+              className="relative max-w-7xl max-h-[90vh] mx-8 animate-scaleIn"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+                <div className="p-6 border-b border-white/10">
+                  <h3 className="text-2xl font-bold text-white text-center">{selectedImage.name}</h3>
+                </div>
+                <div className="p-8">
+                  <img
+                    src={selectedImage.url}
+                    alt={selectedImage.name}
+                    className="max-w-full max-h-[70vh] mx-auto rounded-2xl shadow-2xl object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </SignedIn>
 
       <SignedOut>
@@ -399,6 +447,34 @@ export default function PublishedPage() {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+        
+        .animate-scaleIn {
+          animation: scaleIn 0.3s ease-out;
         }
       `}</style>
     </>
